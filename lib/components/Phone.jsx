@@ -357,8 +357,9 @@ export default class Phone extends React.Component
 
 		const session = this._ua.call(uri,
 			{
-				pcConfig         : this.props.settings.pcConfig || { iceServers: [] },
-				mediaConstraints :
+				sessionTimersExpires : 180,
+				pcConfig             : this.props.settings.pcConfig || { iceServers: [] },
+				mediaConstraints     :
 				{
 					audio : true,
 					video : false

@@ -114,6 +114,37 @@ export default class Session extends React.Component
 		const localVideo = this.refs.localVideo;
 		const session = this.props.session;
 		const peerconnection = session.connection;
+
+		if (!peerconnection.getLocalStreams)
+		{
+			peerconnection.getLocalStreams = function()
+			{
+				const stream = new MediaStream();
+
+				peerconnection.getSenders().forEach(function(sender)
+				{
+					stream.addTrack(sender.track);
+				});
+
+				return [ stream ];
+			};
+		}
+
+		if (!peerconnection.getRemoteStreams)
+		{
+			peerconnection.getRemoteStreams = function()
+			{
+				const stream = new MediaStream();
+
+				peerconnection.getReceivers().forEach(function(receiver)
+				{
+					stream.addTrack(receiver.track);
+				});
+
+				return [ stream ];
+			};
+		}
+
 		const localStream = peerconnection.getLocalStreams()[0];
 		const remoteStream = peerconnection.getRemoteStreams()[0];
 
